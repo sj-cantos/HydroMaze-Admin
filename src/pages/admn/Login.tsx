@@ -1,6 +1,38 @@
 import React from "react";
+import axios from "axios";
+import { useState } from "react";
 
+interface AdminType{
+  username: String;
+  password: String;
+}
 const Login = () => {
+  const [adminCredentials, setAdminCredentials] = useState<AdminType>({
+    username: '',
+    password: ''
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const{ name, value} = e.target;
+    setAdminCredentials(
+      prevState => ({
+        ...prevState,
+        [name]: value
+      })
+    )
+  }
+
+  const handleSubmit = async (e:React.FormEvent) => {
+    e.preventDefault()
+    const response = await axios.post('http://127.0.0.1:4001/auth/login', adminCredentials);
+    const accessToken = response.data.accessToken;
+    const refreshToken = response.data.refreshToken;
+    console.log("access: ",accessToken, "refresh: ", refreshToken);
+    
+  }
+
+
+
   return (
     <>
       <section className="absolute right-0 bg-gray-50 dark:bg-gray-900 w-full">
@@ -27,11 +59,12 @@ const Login = () => {
                     Your email
                   </label>
                   <input
-                    type="email"
-                    name="email"
-                    id="email"
+                    type="string"
+                    name="username"
+                    id="username"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="admin"
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
@@ -44,6 +77,7 @@ const Login = () => {
                     id="password"
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -71,7 +105,8 @@ const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-blue bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  onClick={handleSubmit}
                 >
                   Sign in
                 </button>
