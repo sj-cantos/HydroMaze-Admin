@@ -7,6 +7,7 @@ import orderRouter from './routes/orders.router.js'
 import customerRouter from './routes/customers.router.js'
 import dashboardRouter from './routes/dashboard.router.js'
 import analyticsRouter from './routes/analytics.router.js'
+import authRouter from './routes/auth.router.js'
 const app = express();
 const port = 4001;
 
@@ -27,6 +28,7 @@ app.use(
 
 
 //routes
+app.use("/auth", authRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/customers", customerRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
