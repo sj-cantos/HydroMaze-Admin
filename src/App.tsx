@@ -19,11 +19,12 @@ import CustomerDetails from "./components/Customers/CustomerDetails";
 import OrderDetails from "./components/Orders/OrderDetails";
 import Login from "./pages/admn/Login";
 import { useState } from "react";
+import AuthContext from "./AuthContext";
 
 function App() {
   const [expanded, setExpanded] = useState(true);
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const routes = [
     {
@@ -80,7 +81,7 @@ function App() {
   ];
 
   return (
-  
+  <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn}}> 
       <SidebarContext.Provider 
         value={{
           expanded,
@@ -125,7 +126,7 @@ function App() {
           </div>
         </Router>
       </SidebarContext.Provider>
-  
+    </AuthContext.Provider>
   );
 }
 

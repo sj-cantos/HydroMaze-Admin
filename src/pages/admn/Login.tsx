@@ -1,41 +1,44 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useState } from "react";
-
-interface AdminType{
+import AuthContext from "@/AuthContext";
+interface AdminType {
   username: String;
   password: String;
 }
 const Login = () => {
   const [adminCredentials, setAdminCredentials] = useState<AdminType>({
-    username: '',
-    password: ''
-  })
-  const [error, setError] = useState('');
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const{ name, value} = e.target;
-    setAdminCredentials(
-      prevState => ({
-        ...prevState,
-        [name]: value
-      })
-    )
-  }
+    const { name, value } = e.target;
+    setAdminCredentials((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-  const handleSubmit = async (e:React.FormEvent) => {
-    e.preventDefault()
-    try{ 
-    const response = await axios.post('http://127.0.0.1:4001/auth/login', adminCredentials);
-    const accessToken = response.data.accessToken;
-    const refreshToken = response.data.refreshToken;
-    console.log("access: ",accessToken, "refresh: ", refreshToken);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:4001/auth/login",
+        adminCredentials
+      );
+      const accessToken = response.data.accessToken;
+      const refreshToken = response.data.refreshToken;
+      localStorage.setItem("authToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      setIsLoggedIn(true);
+      console.log("access: ", accessToken, "refresh: ", refreshToken);
     } catch (err) {
       setError("Username or password incorrect");
     }
-  }
-
-
+  };
 
   return (
     <>
@@ -57,7 +60,7 @@ const Login = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Administrator Log-in
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleSubmit}>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Your username
@@ -84,22 +87,20 @@ const Login = () => {
                     onChange={handleChange}
                   />
                 </div>
-                { error && <p className="text-red-500 text-sm">{error} </p>}
-                
+                {error && <p className="text-red-500 text-sm">{error} </p>}
+
                 <button
                   type="submit"
                   className="w-full text-blue bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  onClick={handleSubmit}
+                  
                 >
                   Sign in
                 </button>
-                
               </form>
             </div>
           </div>
         </div>
       </section>
-    
     </>
   );
 };
