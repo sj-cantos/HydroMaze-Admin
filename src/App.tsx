@@ -1,62 +1,60 @@
-import { useState, useEffect } from "react";
-import "./App.css";
-import { useAuth0 } from "@auth0/auth0-react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Dashboard } from "./pages/dashboard/Dashboard.tsx";
-import Customer from "./pages/dashboard/Customers.tsx";
-import Orders from "./pages/dashboard/Orders.tsx";
-import Analytics from "./pages/dashboard/Analytics.tsx";
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { Dashboard } from "./pages/admn/Dashboard";
+import Customer from "./pages/admn/Customers";
+import Orders from "./pages/admn/Orders";
+import Analytics from "./pages/admn/Analytics";
 import "./App.css";
 
-import { SidebarItem } from "./components/TestSidebar.tsx";
-import NewSidebar from "./components/TestSidebar.tsx";
+import { SidebarItem } from "./components/TestSidebar";
+import NewSidebar from "./components/TestSidebar";
 
 import { MdDashboard } from "react-icons/md";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaPerson } from "react-icons/fa6";
 import { IoMdAnalytics } from "react-icons/io";
 
-import SidebarContext from "./SidebarContext.ts";
-import CustomerDetails from "./components/Customers/CustomerDetails.tsx";
-import OrderDetails from "./components/Orders/OrderDetails.tsx";
-
-// if there is a typescript error at auth0 import, run:
-// 'npm uninstall @auth0/auth0-react'
-// 'npm i @auth0/auth0-react'
+import SidebarContext from "./SidebarContext";
+import CustomerDetails from "./components/Customers/CustomerDetails";
+import OrderDetails from "./components/Orders/OrderDetails";
+import Login from "./pages/admn/Login";
+import { useState } from "react";
 
 function App() {
   const [expanded, setExpanded] = useState(true);
   const [activeItem, setActiveItem] = useState<string | null>(null);
-
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const routes = [
     {
       path: "/",
-      element: Dashboard,
+      element: <Dashboard />,
     },
     {
       path: "/customers",
-      element: Customer,
+      element: <Customer />,
     },
     {
       path: "/orders",
-      element: Orders,
+      element: <Orders />,
     },
     {
       path: "/orders/:orderID",
-      element: OrderDetails,
+      element: <OrderDetails />,
     },
     {
       path: "/analytics",
-      element: Analytics,
+      element: <Analytics />,
     },
     {
       path: "/customers/details/:id",
-      element: CustomerDetails,
+      element: <CustomerDetails />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
   ];
-
 
   const sidebarItems = [
     {
@@ -80,48 +78,55 @@ function App() {
       to: "/analytics",
     },
   ];
-  
+
   return (
-    <SidebarContext.Provider 
-      value={{
-        expanded,
-        activeItem,
-        setExpanded,
-        setActiveItem
-      }}>
-      <Router>
-        <div className="flex">
-          <NewSidebar>
-            {sidebarItems.map((item, index) => {
-              return (
-                <SidebarItem
-                icon={<item.icon />}
-                text={item.text}
-                to={item.to}
-                onItemClick={() => {
-                    console.log(`Clicked on ${item.text}`);
-                  }}
-                  key={index}
+  
+      <SidebarContext.Provider 
+        value={{
+          expanded,
+          activeItem,
+          setExpanded,
+          setActiveItem
+        }}>
+        <Router>
+          <div className="flex">
+            {isLoggedIn && (
+              <NewSidebar>
+                {sidebarItems.map((item, index) => (
+                  <SidebarItem
+                    icon={<item.icon />}
+                    text={item.text}
+                    to={item.to}
+                    onItemClick={() => {
+                      console.log(`Clicked on ${item.text}`);
+                    }}
+                    key={index}
                   />
-              );
-            })}
-          </NewSidebar>
-          <div className="pl-100">
-            <Routes>
-              {routes.map((route, index) => {
-                return (
+                ))}
+              </NewSidebar>
+            )}
+            <div className={isLoggedIn ? "pl-100" : ""}>
+              <Routes>
+                {routes.map((route, index) => (
                   <Route
-                  path={route.path}
-                  element={<route.element />}
-                  key={index}
+                    path={route.path}
+                    element={
+                      route.path === "/login" ? (
+                        route.element
+                      ) : (
+                        isLoggedIn ? route.element : <Navigate to="/login" />
+                      )
+                    }
+                    key={index}
                   />
-                  );
-                })}
-            </Routes>
+                ))}
+              </Routes>
+            </div>
           </div>
-        </div>
-      </Router>
-    </SidebarContext.Provider>
+        </Router>
+      </SidebarContext.Provider>
+  
   );
 }
-export default App
+
+export default App;
