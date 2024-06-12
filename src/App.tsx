@@ -27,7 +27,7 @@ interface AdminType {
 function App() {
   const [expanded, setExpanded] = useState(true);
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(localStorage.getItem("authToken") != null);
   const [adminCredentials, setAdminCredentials] = useState<AdminType>({
     username: '',
     password: '',
