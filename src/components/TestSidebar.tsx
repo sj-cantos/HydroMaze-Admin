@@ -7,6 +7,7 @@ import SidebarContext from '@/SidebarContext';
 
 interface SidebarProps {
   children: ReactNode;
+  username: String;
 }
 
 interface SidebarItemProps {
@@ -16,7 +17,7 @@ interface SidebarItemProps {
   onItemClick: (to: string) => void;
 }
 
-export default function NewSidebar({ children }: SidebarProps) {
+export default function NewSidebar({ children, username}: SidebarProps) {
   const {expanded, setExpanded } = useContext(SidebarContext)
 
 
@@ -55,9 +56,9 @@ export default function NewSidebar({ children }: SidebarProps) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">Jonel Teano</h4>
+              <h4 className="font-semibold">{username}</h4>
               <span className="text-xs text-gray-600">
-                jonelmantos@gmail.com
+                admin
               </span>
             </div>
             <MoreVertical size={20} />

@@ -3,11 +3,22 @@ import { createContext, useContext } from 'react';
 interface AuthContextProps{
     isLoggedIn: boolean;
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+    adminCredentials: {
+        username: string;
+        password: string;
+    }
+    setAdminCredentials: React.Dispatch<React.SetStateAction<{username: string, password: string}>>
+   
 }
 
 const AuthContext = createContext<AuthContextProps>({
     isLoggedIn: false,
-    setIsLoggedIn: () => {}
+    adminCredentials:{
+        username: '',
+        password: ''
+    },
+    setIsLoggedIn: () => {},
+    setAdminCredentials: () => {}
 }
 )
 

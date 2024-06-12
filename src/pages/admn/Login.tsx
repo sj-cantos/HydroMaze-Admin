@@ -7,13 +7,8 @@ interface AdminType {
   password: String;
 }
 const Login = () => {
-  const [adminCredentials, setAdminCredentials] = useState<AdminType>({
-    username: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
-
+  const { isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials } = useContext(AuthContext);
+  const [error, setError] = useState(""); 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAdminCredentials((prevState) => ({
@@ -33,7 +28,9 @@ const Login = () => {
       const refreshToken = response.data.refreshToken;
       localStorage.setItem("authToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      setError("");
       setIsLoggedIn(true);
+    
       console.log("access: ", accessToken, "refresh: ", refreshToken);
     } catch (err) {
       setError("Username or password incorrect");

@@ -20,43 +20,18 @@ import OrderDetails from "./components/Orders/OrderDetails";
 import Login from "./pages/admn/Login";
 import { useState } from "react";
 import AuthContext from "./AuthContext";
-
+interface AdminType {
+  username: string;
+  password: string;
+}
 function App() {
   const [expanded, setExpanded] = useState(true);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  const routes = [
-    {
-      path: "/",
-      element: <Dashboard />,
-    },
-    {
-      path: "/customers",
-      element: <Customer />,
-    },
-    {
-      path: "/orders",
-      element: <Orders />,
-    },
-    {
-      path: "/orders/:orderID",
-      element: <OrderDetails />,
-    },
-    {
-      path: "/analytics",
-      element: <Analytics />,
-    },
-    {
-      path: "/customers/details/:id",
-      element: <CustomerDetails />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-  ];
-
+  const [adminCredentials, setAdminCredentials] = useState<AdminType>({
+    username: '',
+    password: '',
+  });
   const sidebarItems = [
     {
       icon: MdDashboard,
@@ -81,46 +56,44 @@ function App() {
   ];
 
   return (
-  <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn}}> 
-      <SidebarContext.Provider 
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials }}>
+      <SidebarContext.Provider
         value={{
           expanded,
           activeItem,
           setExpanded,
-          setActiveItem
-        }}>
+          setActiveItem,
+        }}
+      >
         <Router>
           <div className="flex">
             {isLoggedIn && (
-              <NewSidebar>
+              <NewSidebar username = {adminCredentials.username}>
                 {sidebarItems.map((item, index) => (
                   <SidebarItem
+                    key={index} // Add key prop for performance
                     icon={<item.icon />}
                     text={item.text}
                     to={item.to}
-                    onItemClick={() => {
-                      console.log(`Clicked on ${item.text}`);
-                    }}
-                    key={index}
+                    onItemClick={() => console.log(`Clicked on ${item.text}`)}
                   />
                 ))}
               </NewSidebar>
             )}
             <div className={isLoggedIn ? "pl-100" : ""}>
               <Routes>
-                {routes.map((route, index) => (
-                  <Route
-                    path={route.path}
-                    element={
-                      route.path === "/login" ? (
-                        route.element
-                      ) : (
-                        isLoggedIn ? route.element : <Navigate to="/login" />
-                      )
-                    }
-                    key={index}
-                  />
-                ))}
+                {isLoggedIn ? (
+                  <>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/orders/:orderID" element={<OrderDetails />} />
+                    <Route path="/customers" element={<Customer />} />
+                    <Route path="/analytics" element={<Analytics />} />
+                    <Route path="/customers/details/:id" element={<CustomerDetails />} />
+                  </>
+                ) : (
+                  <Route path="/" element={<Login />} />
+                )}
               </Routes>
             </div>
           </div>
