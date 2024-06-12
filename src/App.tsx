@@ -23,6 +23,7 @@ import AuthContext from "./AuthContext";
 interface AdminType {
   username: string;
   password: string;
+  token: string;
 }
 function App() {
   const [expanded, setExpanded] = useState(true);
@@ -31,6 +32,7 @@ function App() {
   const [adminCredentials, setAdminCredentials] = useState<AdminType>({
     username: '',
     password: '',
+    token: ''
   });
   const sidebarItems = [
     {
@@ -92,7 +94,7 @@ function App() {
                     <Route path="/customers/details/:id" element={<CustomerDetails />} />
                   </>
                 ) : (
-                  <Route path="/" element={<Login />} />
+                  <Route path="/" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} adminCredentials={adminCredentials} setAdminCredentials={setAdminCredentials} />} />
                 )}
               </Routes>
             </div>

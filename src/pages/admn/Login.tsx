@@ -2,12 +2,14 @@ import React, { useContext } from "react";
 import axios from "axios";
 import { useState } from "react";
 import AuthContext from "@/AuthContext";
+import {AuthContextProps} from "../../AuthContext.tsx"
 interface AdminType {
   username: String;
   password: String;
 }
-const Login = () => {
-  const { isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials } = useContext(AuthContext);
+
+const Login = ({ setIsLoggedIn, adminCredentials, setAdminCredentials }:AuthContextProps ) => {
+ 
   const [error, setError] = useState(""); 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,8 +28,7 @@ const Login = () => {
       );
       const accessToken = response.data.accessToken;
       const refreshToken = response.data.refreshToken;
-      localStorage.setItem("authToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      setAdminCredentials({...adminCredentials, token: accessToken, })
       setError("");
       setIsLoggedIn(true);
     
