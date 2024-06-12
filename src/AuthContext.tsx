@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import axios from 'axios';
-
+import axios, { AxiosInstance, AxiosStatic } from 'axios';
+import { jwtDecode } from 'jwt-decode';
 export interface AuthContextProps {
   isLoggedIn: boolean;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,7 +10,8 @@ export interface AuthContextProps {
     token: string;
   };
   setAdminCredentials: React.Dispatch<React.SetStateAction<{ username: string; password: string; token: string }>>;
-  refreshToken: () => Promise<void>;
+  refreshToken: () => Promise<any>;
+  axiosJWT: AxiosInstance
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -33,21 +34,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         token: response.data.accessToken,
       }));
       localStorage.setItem('authToken', response.data.accessToken);
+      return response.data;
     } catch (error) {
-      console.error('Error refreshing token', error);
+      console.log('Error refreshing token', error);
       setIsLoggedIn(false);
     }
   };
+  const axiosJWT = axios.create();
+  axiosJWT.interceptors.request.use(
+    async (config) => {
+      let currentdate = new Date()
+      const decodedToken = jwtDecode(adminCredentials.token)
+      if(decodedToken && decodedToken.exp && decodedToken.exp * 1000 < currentdate.getTime()) {
+        const data = await refreshToken()
+        config.headers["authorization"] = "Bearer " + data.accessToken;
+      }
+      return config;
+    }, (error) => {
+      Promise.reject(error);
+    }
+  )
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refreshToken();
-    }, 15 * 60 * 1000); // Refresh token every 15 minutes
-    return () => clearInterval(interval);
-  }, [refreshToken]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refreshToken();
+  //   }, 15 * 60 * 1000); // Refresh token every 15 minutes
+  //   return () => clearInterval(interval);
+  // }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials, refreshToken }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials, refreshToken, axiosJWT }}>
       {children}
     </AuthContext.Provider>
   );

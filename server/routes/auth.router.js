@@ -20,8 +20,9 @@ router.post('/login', async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN);
     refreshTokens.push(refreshToken);
+    console.log(accessToken," ", refreshToken);
     res.json({ accessToken, refreshToken });
-
+    
   } catch (err) { console.log(err); }
 });
 
@@ -34,6 +35,7 @@ router.post('/token', (req, res) => {
     if (err) return res.sendStatus(403);
     const accessToken = generateAccessToken({ name: user.name });
     res.json({ accessToken });
+    console.log("success refresh token ", refreshToken);
   });
 });
 

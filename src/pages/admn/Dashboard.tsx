@@ -4,8 +4,9 @@ import { DataCard } from "../../components/Dashboard/DataCard.tsx";
 import { IoCartSharp } from "react-icons/io5";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import SidebarContext from "@/SidebarContext.ts";
+import jwt_decode, { jwtDecode } from "jwt-decode";
 import {
   Table,
   TableCaption,
@@ -20,7 +21,7 @@ import "../../styles/Dashboard.css";
 import Lottie from "lottie-react";
 import animationData from "../../assets/animation.json";
 import { useAuth } from "@/AuthContext.tsx";
-
+import { AxiosError } from "axios";
 type StatusData = { _id: string; count: number };
 type SalesData = {
   date: Date;
@@ -42,7 +43,7 @@ interface Orders {
 
 export const Dashboard = () => {
   const { expanded, setActiveItem } = useContext(SidebarContext);
-  const { adminCredentials, isLoggedIn } = useAuth();
+  const { adminCredentials, isLoggedIn, axiosJWT } = useAuth();
   const [expandedClass, setExpandedClass] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [todaysOrders, setTodaysOrders] = useState(0);
@@ -101,37 +102,37 @@ export const Dashboard = () => {
           headers: { Authorization: `Bearer ${adminCredentials.token}` },
         };
 
-        const todaysOrders = await axios.get(
+        const todaysOrders = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/orders-today/",
           config
         );
         setTodaysOrders(todaysOrders.data.count || 0);
 
-        const todaysRevenue = await axios.get(
+        const todaysRevenue = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/revenue-today/",
           config
         );
         setTodaysRevenue(todaysRevenue.data[0].revenue || 0);
 
-        const salesMonth = await axios.get(
+        const salesMonth = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/revenue-month/",
           config
         );
         setSalesMonth(salesMonth.data[0].revenue || 0);
 
-        const statusData = await axios.get(
+        const statusData = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/status-data/",
           config
         );
         setStatusData(statusData.data);
 
-        const salesData = await axios.get(
+        const salesData = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/daily-sales/",
           config
         );
         setDailySales(salesData.data);
 
-        const recentOrdersData = await axios.get(
+        const recentOrdersData = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/recent-orders/",
           config
         );
@@ -145,8 +146,8 @@ export const Dashboard = () => {
         );
         setRecentOrders(ordersWithDateTime);
         setIsLoading(false);
-      } catch (err) {
-        console.log("failed to fetch data\n", err);
+      } catch (error: any) {
+        console.error(error);
       }
     };
 
