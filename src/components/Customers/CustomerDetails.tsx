@@ -166,8 +166,8 @@ export default function CustomerDetails() {
                                     longitude={viewports?.[index]?.longitude}
                                     latitude={viewports?.[index]?.latitude}
                                     zoom={viewports?.[index]?.zoom}
-                                    mapboxAccessToken= {import.meta.env.VITE_MAPBOX_TOKEN} 
-                                    //token = "pk.eyJ1Ijoiam1hZ3dpbGkiLCJhIjoiY2xwaGZwaHh0MDJtOTJqbzVkanpvYjRkNSJ9.fZFeViJyigw6k1ebFAbTYA"                                  
+                                    // mapboxAccessToken= {import.meta.env.VITE_MAPBOX_TOKEN} 
+                                    mapboxAccessToken = "pk.eyJ1Ijoiam1hZ3dpbGkiLCJhIjoiY2xwaGZwaHh0MDJtOTJqbzVkanpvYjRkNSJ9.fZFeViJyigw6k1ebFAbTYA"                                  
                                     mapStyle="mapbox://styles/mapbox/streets-v12"
                                     interactive={true}
                                     onZoom={(e)=>{
