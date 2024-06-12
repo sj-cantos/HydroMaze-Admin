@@ -12,6 +12,7 @@ export interface AuthContextProps {
   setAdminCredentials: React.Dispatch<React.SetStateAction<{ username: string; password: string; token: string }>>;
   refreshToken: () => Promise<any>;
   axiosJWT: AxiosInstance
+  logout: () => {}
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -54,7 +55,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       Promise.reject(error);
     }
   )
+  const logout = async () => {
+    try {
+      const response = await axios.delete("http://127.0.0.1:4001/auth/logout")
+      if(response.status === 204){
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
+        setIsLoggedIn(false); 
+      }
+    }
+    catch(error) {
+      console.error(error);
+    }
 
+
+  }
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     refreshToken();
@@ -63,7 +78,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials, refreshToken, axiosJWT }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, adminCredentials, setAdminCredentials, refreshToken, axiosJWT, logout }}>
       {children}
     </AuthContext.Provider>
   );

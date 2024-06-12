@@ -19,7 +19,7 @@ interface SidebarItemProps {
 
 export default function NewSidebar({ children, username}: SidebarProps) {
   const {expanded, setExpanded } = useContext(SidebarContext)
-
+  
 
   return (
     <aside className="h-screen fixed z-50">
@@ -62,7 +62,9 @@ export default function NewSidebar({ children, username}: SidebarProps) {
               </span>
             </div>
             <MoreVertical size={20} />
+              
           </div>
+         
         </div>
       </nav>
     </aside>

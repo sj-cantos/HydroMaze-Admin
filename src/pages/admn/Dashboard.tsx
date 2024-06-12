@@ -165,7 +165,7 @@ export const Dashboard = () => {
       <h1 className="ml-5 mt-5 font-semibold text-gray-800 text-3xl">
         DASHBOARD
       </h1>
-      <hr className="m-2" />
+      <br className="m-2" />
 
       {!isLoading ? (
         <>
