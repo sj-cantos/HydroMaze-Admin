@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Dashboard } from './pages/admn/Dashboard';
 import Customer from './pages/admn/Customers';
@@ -16,7 +16,7 @@ import CustomerDetails from './components/Customers/CustomerDetails';
 import OrderDetails from './components/Orders/OrderDetails';
 import Login from './pages/admn/Login';
 import { AuthProvider, useAuth } from './AuthContext';
-
+import { useState } from 'react';
 function App() {
   const [expanded, setExpanded] = useState(true);
   const [activeItem, setActiveItem] = useState<string | null>(null);
@@ -56,7 +56,7 @@ function App() {
       >
         <Router>
           <div className="flex">
-            <ProtectedRoutes sidebarItems={sidebarItems} />
+            <AuthWrapper sidebarItems={sidebarItems} />
           </div>
         </Router>
       </SidebarContext.Provider>
@@ -64,15 +64,23 @@ function App() {
   );
 }
 
-const ProtectedRoutes = ({ sidebarItems }: { sidebarItems: { icon: any; text: string; to: string }[] }) => {
-  const { isLoggedIn, adminCredentials } = useAuth();
+const AuthWrapper = ({ sidebarItems }: { sidebarItems: { icon: any; text: string; to: string }[] }) => {
+  const { isLoggedIn, adminCredentials, refreshToken } = useAuth();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshToken();
+    }, 15 * 60 * 1000); // Refresh token every 15 minutes
+    return () => clearInterval(interval);
+  }, [refreshToken]);
+
   return (
     <>
       {isLoggedIn && (
         <NewSidebar username={adminCredentials.username}>
           {sidebarItems.map((item, index) => (
             <SidebarItem
-              key={index}
+              key={index} // Add key prop for performance
               icon={<item.icon />}
               text={item.text}
               to={item.to}
@@ -89,13 +97,14 @@ const ProtectedRoutes = ({ sidebarItems }: { sidebarItems: { icon: any; text: st
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:orderID" element={<OrderDetails />} />
               <Route path="/customers" element={<Customer />} />
-              <Route path="/analytics" element={<Analytics />} />
               <Route path="/customers/details/:id" element={<CustomerDetails />} />
+              <Route path="/analytics" element={<Analytics />} />
             </>
           ) : (
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
           )}
-          <Route path='*' element = {<Navigate to={isLoggedIn ? '/' : '/login'} replace />}></Route>
+          {/* Redirect all unknown paths to home or login */}
+          <Route path="*" element={<Navigate to={isLoggedIn ? "/" : "/login"} replace />} />
         </Routes>
       </div>
     </>

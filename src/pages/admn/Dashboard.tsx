@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import "../../styles/Dashboard.css";
 import Lottie from "lottie-react";
 import animationData from "../../assets/animation.json";
+import { useAuth } from "@/AuthContext.tsx";
 
 type StatusData = { _id: string; count: number };
 type SalesData = {
@@ -41,6 +42,7 @@ interface Orders {
 
 export const Dashboard = () => {
   const { expanded, setActiveItem } = useContext(SidebarContext);
+  const { adminCredentials, isLoggedIn } = useAuth();
   const [expandedClass, setExpandedClass] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [todaysOrders, setTodaysOrders] = useState(0);
@@ -49,6 +51,7 @@ export const Dashboard = () => {
   const [dailySales, setDailySales] = useState<SalesData[]>([]);
   const [recentOrders, setRecentOrders] = useState<Orders[]>([]);
   const [salesMonth, setSalesMonth] = useState(0);
+
   const pieOptions = {
     labels: statusData.map((data) => data._id),
     series: statusData.map((data) => data.count),
@@ -56,7 +59,6 @@ export const Dashboard = () => {
     legend: {
       show: true,
     },
-
     chart: {
       toolbar: {
         show: true,
@@ -73,7 +75,6 @@ export const Dashboard = () => {
           format: "dd MMM",
         },
       },
-
       colors: ["#0084ff", "#00b8d9", "#00c7b6", "#00e396", "#0acf97"],
       legend: {
         show: true,
@@ -83,7 +84,6 @@ export const Dashboard = () => {
         background: "white",
       },
     },
-
     series: [
       {
         name: "Revenue",
@@ -97,40 +97,43 @@ export const Dashboard = () => {
 
     const fetchData = async () => {
       try {
+        const config = {
+          headers: { Authorization: `Bearer ${adminCredentials.token}` },
+        };
+
         const todaysOrders = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/orders-today/"
+          "http://localhost:4001/api/v1/dashboard/orders-today/",
+          config
         );
-        if(todaysOrders.data === null) { setTodaysOrders(0)}
-        else{
-        console.log("todays orders",todaysOrders.data.count);
-        setTodaysOrders(todaysOrders.data.count);
-        }
+        setTodaysOrders(todaysOrders.data.count || 0);
+
         const todaysRevenue = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/revenue-today/"
+          "http://localhost:4001/api/v1/dashboard/revenue-today/",
+          config
         );
-        console.log("today rev",todaysRevenue.data[0].revenue);
-        setTodaysRevenue(todaysRevenue.data[0].revenue);
+        setTodaysRevenue(todaysRevenue.data[0].revenue || 0);
 
         const salesMonth = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/revenue-month/"
+          "http://localhost:4001/api/v1/dashboard/revenue-month/",
+          config
         );
-        console.log("month rev",salesMonth.data[0].revenue);
-        setSalesMonth(salesMonth.data[0].revenue);
+        setSalesMonth(salesMonth.data[0].revenue || 0);
 
         const statusData = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/status-data/"
+          "http://localhost:4001/api/v1/dashboard/status-data/",
+          config
         );
-        console.log(statusData.data);
         setStatusData(statusData.data);
 
         const salesData = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/daily-sales/"
+          "http://localhost:4001/api/v1/dashboard/daily-sales/",
+          config
         );
-
-        console.log(salesData.data);
         setDailySales(salesData.data);
+
         const recentOrdersData = await axios.get(
-          "http://localhost:4001/api/v1/dashboard/recent-orders/"
+          "http://localhost:4001/api/v1/dashboard/recent-orders/",
+          config
         );
         const ordersWithDateTime = recentOrdersData.data.map(
           (order: Orders) => {
@@ -146,8 +149,11 @@ export const Dashboard = () => {
         console.log("failed to fetch data\n", err);
       }
     };
-    fetchData();
-  }, []);
+
+    if (isLoggedIn) {
+      fetchData();
+    }
+  }, [isLoggedIn, adminCredentials.token]);
 
   useEffect(() => {
     setExpandedClass(!expanded ? "notExpanded" : "");
@@ -254,12 +260,12 @@ export const Dashboard = () => {
         </>
       ) : (
         <div className="flex justify-center items-center h-screen">
-        <Lottie
-          animationData={animationData}
-          loop
-          autoplay
-          style={{ width: 300, height: 300 }}
-        />
+          <Lottie
+            animationData={animationData}
+            loop
+            autoplay
+            style={{ width: 300, height: 300 }}
+          />
         </div>
       )}
     </div>
