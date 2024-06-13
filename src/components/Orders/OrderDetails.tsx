@@ -27,15 +27,20 @@ export default function OrderDetails() {
   }, [setActiveItem]);
 
   useEffect(() => {
-    setExpandedStyle({
-      transition: "0.1s",
-      left: expanded ? "0" : "70px",
-      width: expanded ? "80vw" : "calc(100vw - 85px)",
-    });
+    !expanded
+      ? setExpandedStyle({
+          left: "70px",
+          width: "calc(100vw - 85px)",
+          transition: "0.1s",
+        })
+      : setExpandedStyle({
+          transition: "0.1s",
+          width: "80vw",
+        });
   }, [expanded]);
 
   return (
-    <div className="relative" style={expandedStyle}>
+    <div className={`relative left-[285px]`} style={expandedStyle}>
       <h1 className="ml-5 mt-5 font-semibold text-gray-800 text-3xl">ORDERS</h1>
       <hr className="mt-2 mb-10" />
       <div className="ml-5 mr-10">
@@ -70,22 +75,22 @@ export default function OrderDetails() {
           </div >
           <div className = "flex justify-between items-start"> 
           <div className="ml-5">
-            <div className="text-lg font-semibold text-gray-700 mb-2">
+            <div className="text-lg font-semibold text-gray-700 mb-5">
               {order.username}
-              <div>
+              <div className="text-lg font-light">
                 P {order.total}
               </div>
             </div>
-            <div className="text-lg font-semibold text-gray-700 mb-2">
+            <div className="text-lg font-semibold text-gray-700 mb-5">
               Order Details
-              <div >
-                Slim: {order.slim}
+              <div className="text-lg font-light" >
+                Slim: {order.slim} <br/>
                 Round: {order.round}
               </div>
             </div>
             <div className="text-lg font-semibold text-gray-700">
               Delivery Address
-              <div className="text-sm font-medium">
+              <div className="text-lg font-light">
                 {order.location.address}
               </div>
             </div>
