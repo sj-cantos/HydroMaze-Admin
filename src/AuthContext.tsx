@@ -70,6 +70,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
   }
+  useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    if (storedToken && storedRefreshToken) {
+      setAdminCredentials({ username: '', password: '', token: storedToken });
+      setIsLoggedIn(true);
+    }
+  }, []);
   // useEffect(() => {
   //   const interval = setInterval(() => {
   //     refreshToken();

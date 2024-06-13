@@ -41,13 +41,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { AlertButton } from "@/components/Orders/AlertButton";
-import { Link } from "react-router-dom";
-import { GiConfirmed } from "react-icons/gi";
-import { BsXCircle } from "react-icons/bs";
-import OrderDetails from "@/components/Orders/OrderDetails";
+import { Link, To } from "react-router-dom";
 import StatusBadge from "@/components/Orders/StatusBadge";
+import { useNavigate } from "react-router-dom";
 
-interface Orders {
+export interface OrdersType {
   _id: string;
   username: string;
   round: number;
@@ -58,6 +56,11 @@ interface Orders {
   createdAt: string;
   date: string;
   time: string;
+  location: {
+    longitude: number
+    latitude: number
+    address: string
+  }
   
 }
 
@@ -78,7 +81,7 @@ const Orders = () => {
     ),
   });
   const [searchInfo, setSearchInfo] = useState({});
-  const [orders, setOrders] = useState<Orders[]>([]);
+  const [orders, setOrders] = useState<OrdersType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10);
   const { expanded, setActiveItem } = useContext(SidebarContext);
@@ -87,6 +90,7 @@ const Orders = () => {
   });
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -95,7 +99,7 @@ const Orders = () => {
         searchInfo
       );
       console.log(orderData);
-      const ordersWithDateTime = orderData.data.map((order: Orders) => {
+      const ordersWithDateTime = orderData.data.map((order: OrdersType) => {
         const dateTime = new Date(order.createdAt);
         const date = dateTime.toLocaleDateString();
         const time = dateTime.toLocaleTimeString();
@@ -118,16 +122,16 @@ const Orders = () => {
     const getInitialData = async () => {
       try {
         const ordersResponse = await axios.get('http://localhost:4001/api/v1/orders/');
-        const ordersData = ordersResponse.data.map((order: Orders) => ({
+        const ordersData = ordersResponse.data.map((order: OrdersType) => ({
           ...order,
           ...formatDate(order.createdAt),
         }));
   
-        const pendingOrders = ordersData.filter((order: Orders) => order.status === 'pending');
-        const confirmedOrders = ordersData.filter((order: Orders) => order.status === 'confirmed');
-        const forDeliveryOrders = ordersData.filter((order: Orders) => order.status === 'for delivery');
-        const deliveredOrders = ordersData.filter((order: Orders) => order.status === 'delivered');
-        const rejectedOrders = ordersData.filter((order: Orders) => order.status === 'rejected');
+        const pendingOrders = ordersData.filter((order: OrdersType) => order.status === 'pending');
+        const confirmedOrders = ordersData.filter((order: OrdersType) => order.status === 'confirmed');
+        const forDeliveryOrders = ordersData.filter((order: OrdersType) => order.status === 'for delivery');
+        const deliveredOrders = ordersData.filter((order: OrdersType) => order.status === 'delivered');
+        const rejectedOrders = ordersData.filter((order: OrdersType) => order.status === 'rejected');
   
         setOrders([...pendingOrders, ...confirmedOrders, ...forDeliveryOrders, ...deliveredOrders, ...rejectedOrders]);
       } catch (error) {
@@ -397,9 +401,9 @@ const Orders = () => {
                   </TableCell>
                 )}
                 <TableCell>
-                  <Link to={`/orders/${order._id}`} className="underline">
+                  <button onClick={()=> {navigate(`/orders/${order._id}`, { state: { order } })}} className="underline">
                     {order.username}
-                  </Link>
+                  </button>
                 </TableCell>
                 <TableCell>{order.round}</TableCell>
                 <TableCell>{order.slim}</TableCell>
