@@ -370,7 +370,7 @@ const Orders = () => {
           <TableHeader>
             <TableRow>
               <TableHead><Checkbox /></TableHead>
-              <TableHead>Order ID</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead>Round</TableHead>
               <TableHead>Slim</TableHead>
               <TableHead>Total</TableHead>
@@ -398,7 +398,7 @@ const Orders = () => {
                 )}
                 <TableCell>
                   <Link to={`/orders/${order._id}`} className="underline">
-                    {order._id}
+                    {order.username}
                   </Link>
                 </TableCell>
                 <TableCell>{order.round}</TableCell>

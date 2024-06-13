@@ -30,10 +30,10 @@ app.use(
 
 //routes
 app.use("/auth", authRouter);
-app.use("/api/v1/orders", authenticateToken, orderRouter);
-app.use("/api/v1/customers", authenticateToken, customerRouter);
-app.use("/api/v1/dashboard",authenticateToken, dashboardRouter);
-app.use("/api/v1/analytics", authenticateToken, analyticsRouter);
+app.use("/api/v1/orders",  orderRouter);
+app.use("/api/v1/customers", customerRouter);
+app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/analytics",  analyticsRouter);
 
 app.listen(port, console.log(`App is running \nListening to port ${port}`));
 
