@@ -106,7 +106,8 @@ export const Dashboard = () => {
           "http://localhost:4001/api/v1/dashboard/orders-today/",
           config
         );
-        setTodaysOrders(todaysOrders.data.count || 0);
+        console.log(todaysOrders)
+        setTodaysOrders(todaysOrders.data[0].count);
 
         const todaysRevenue = await axiosJWT.get(
           "http://localhost:4001/api/v1/dashboard/revenue-today/",
