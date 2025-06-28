@@ -4,9 +4,7 @@ import { DataCard } from "../../components/Dashboard/DataCard.tsx";
 import { IoCartSharp } from "react-icons/io5";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
-import axios, { Axios } from "axios";
 import SidebarContext from "@/SidebarContext.ts";
-import jwt_decode, { jwtDecode } from "jwt-decode";
 import {
   Table,
   TableCaption,
@@ -21,7 +19,6 @@ import "../../styles/Dashboard.css";
 import Lottie from "lottie-react";
 import animationData from "../../assets/animation.json";
 import { useAuth } from "@/AuthContext.tsx";
-import { AxiosError } from "axios";
 type StatusData = { _id: string; count: number };
 type SalesData = {
   date: Date;
@@ -163,7 +160,7 @@ export const Dashboard = () => {
   }, [expanded]);
 
   return (
-    <div className={`dashboard ${expandedClass}`}>
+    <div id="Dashboard" className={`dashboard ${expandedClass}`}>
       <h1 className="ml-5 mt-5 font-semibold text-gray-800 text-3xl">
         DASHBOARD
       </h1>
@@ -177,6 +174,7 @@ export const Dashboard = () => {
               content={todaysOrders}
               color="#2554da"
               icon={<IoCartSharp />}
+              data-testid="orders-today"
             />
             <DataCard
               title="TODAY'S REVENUE"
