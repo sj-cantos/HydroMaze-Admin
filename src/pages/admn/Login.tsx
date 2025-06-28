@@ -29,6 +29,7 @@ const Login = () => {
       setIsLoggedIn(true);
     } catch (err) {
       setError("Username or password incorrect");
+      console.log("Login error:", err);
     }
   };
 

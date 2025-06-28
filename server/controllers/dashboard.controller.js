@@ -2,12 +2,8 @@ import { Orders } from "../database.js";
 import { Customers } from "../database.js";
 
 const today = new Date();
-const start = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1);
-const end = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate() ,
-);
+const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
 
 const getOrdersToday = async (req, res) => {
@@ -36,6 +32,7 @@ const getOrdersToday = async (req, res) => {
       }
       
     ]);
+    console.log("orders today", ordersToday);
      if(ordersToday.length === 0) {
         res.json({count: 0});
           console.log("no orders today", ordersToday);

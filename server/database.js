@@ -26,4 +26,4 @@ const ordersSchema = new mongoose.Schema({
 
 export const Orders = mongoose.model('Order', ordersSchema, 'orders');
 export const Customers = mongoose.model('Customer', new mongoose.Schema(), 'users');
-
+export const Admin = mongoose.model('Admin', new mongoose.Schema(), 'admin');

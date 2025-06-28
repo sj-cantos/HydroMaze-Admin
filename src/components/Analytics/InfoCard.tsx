@@ -5,7 +5,7 @@ interface InfoProps  {
     sales : number;
     percentage? : number;
     label : string;
-    icon : ReactNode;
+    icon : any;
 } 
 
 const InfoCard: React.FC<InfoProps> = ({sales,percentage,label, icon}) => ( 
@@ -16,6 +16,7 @@ const InfoCard: React.FC<InfoProps> = ({sales,percentage,label, icon}) => (
                     
                 
                 </div>
+                {icon}
                 <div className="inline-flex text-sm text-gray-600 group-hover:text-gray-200 sm:text-base">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

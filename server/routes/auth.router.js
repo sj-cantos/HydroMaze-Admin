@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import express from 'express';
-import Admin from '../model.js';
+import {Admin} from '../database.js';
 const router = express.Router();
 dotenv.config()
 let refreshTokens = [];

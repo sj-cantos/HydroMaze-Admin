@@ -103,15 +103,15 @@ const Analytics = () => {
         "http://localhost:4001/api/v1/analytics/monthly-rev"
       );
 
-      if (totalSales.data.monthlySalesTotal) {
-        setMonthTotal(totalSales.data.monthlySalesTotal[0].total);
+      if (totalSales.data.monthlySalesTotal[0]) {
+        setMonthTotal(totalSales.data.monthlySalesTotal.total);
       } else {
         setMonthTotal(0);
       }
 
       if (totalSales.data.weeklySalesTotal[0]) {
         console.log("w:", totalSales.data.weeklySalesTotal[0].total);
-        setWeekTotal(totalSales.data.weeklySalesTotal[0].total);
+        setWeekTotal(totalSales.data.weeklySalesTotal.total);
       } else {
         setWeekTotal(0);
       }
@@ -122,7 +122,7 @@ const Analytics = () => {
         setYearTotal(0);
       }
 
-      console.log("total", totalSales.data.weeklySalesTotal[0].total);
+      console.log("total", totalSales.data.weeklySalesTotal.total);
       setConTypeSales(containerTypeSales.data);
       console.log(containerTypeSales.data);
       setMonthlySalesData(monthlySales.data);
@@ -169,6 +169,7 @@ const Analytics = () => {
             </div>
             <div className="card4">
               <InfoCard sales={weekTotal} label = {"Past Week"} icon = {FaPesoSign} />
+
             </div>
             <div className="barGraph">
               <h1 className="font-semibold ml-5 mt-5">Monthly Revenue</h1>
