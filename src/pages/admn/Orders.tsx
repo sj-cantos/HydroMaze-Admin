@@ -12,9 +12,6 @@ import {
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Select,
@@ -26,7 +23,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -41,7 +37,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { AlertButton } from "@/components/Orders/AlertButton";
-import { Link, To } from "react-router-dom";
 import StatusBadge from "@/components/Orders/StatusBadge";
 import { useNavigate } from "react-router-dom";
 
@@ -179,7 +174,7 @@ const Orders = () => {
     }
   };
 
-  const handleSingleConfirm = async (id: String) => {
+  const handleSingleConfirm = async (id: string) => {
     try {
       const confirmedOrders = await axios.post(
         "http://localhost:4001/api/v1/orders/confirm",
@@ -197,7 +192,7 @@ const Orders = () => {
     }
   };
 
-  const handleSingleReject = async (id:String) => {
+  const handleSingleReject = async (id:string) => {
     try {
       const confirmedOrders = await axios.post(
         "http://localhost:4001/api/v1/orders/reject",

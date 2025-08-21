@@ -1,13 +1,13 @@
 import React from 'react';
 import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react';
-import { useContext, useState, ReactNode } from 'react';
+import { useContext, ReactNode } from 'react';
 import restapi from '../assets/restapi.jpg';
 import { Link } from 'react-router-dom';
 import SidebarContext from '@/SidebarContext';
 
 interface SidebarProps {
   children: ReactNode;
-  username: String;
+  username: string;
 }
 
 interface SidebarItemProps {

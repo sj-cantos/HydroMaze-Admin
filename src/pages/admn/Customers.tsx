@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
@@ -34,7 +33,7 @@ export default function Customers() {
   const [expandedStyle, setExpandedStyle] = useState<CSSProperties>({
     transition: "0.1s"
   })
-  const [visibleRows, setVisibleRows] = useState(2);
+  const [, setVisibleRows] = useState(2);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const pageSize = 4;
@@ -65,9 +64,9 @@ export default function Customers() {
           "http://localhost:4001/api/v1/customers/"
         );
 
-        let structuredData = [];
+        const structuredData = [];
 
-        for (let i in userData.data) {
+        for (const i in userData.data) {
           structuredData.push({
             id: userData.data[i].username,
             picture: userData.data[i].picture

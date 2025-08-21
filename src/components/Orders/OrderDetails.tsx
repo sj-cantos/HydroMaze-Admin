@@ -13,7 +13,7 @@ const initialViewport = {
 
 export default function OrderDetails() {
   const { expanded, setActiveItem } = useContext(SidebarContext);
-  const { orderID } = useParams();
+  useParams();
   const location = useLocation();
   const { order } = (location.state as { order: OrdersType }) || {};
 
@@ -21,7 +21,8 @@ export default function OrderDetails() {
     transition: "0.1s",
   });
 
-  const [viewport, setViewport] = useState(initialViewport);
+  // eslint-disable-next-line no-empty-pattern
+  const [] = useState(initialViewport);
   useEffect(() => {
     setActiveItem("/orders");
   }, [setActiveItem]);

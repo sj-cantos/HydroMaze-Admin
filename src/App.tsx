@@ -72,6 +72,7 @@ function App() {
 const AuthWrapper = ({
   sidebarItems,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sidebarItems: { icon: any; text: string; to: string }[];
 }) => {
   const { isLoggedIn, adminCredentials, logout } = useAuth();
@@ -93,17 +94,17 @@ const AuthWrapper = ({
         </NewSidebar>
       )}
       <div className={isLoggedIn ? "pl-100" : ""}>
-        
-        {isLoggedIn && (<div className="absolute z-20 top-8 right-10">
-          <IoPersonCircleOutline
-            size={30}
-            onClick={() => {
-              setShowPopup(!showPopup);
-              console.log(showPopup);
-            }}
-          />
-        </div>
-         )}
+        {isLoggedIn && (
+          <div className="absolute z-20 top-8 right-10">
+            <IoPersonCircleOutline
+              size={30}
+              onClick={() => {
+                setShowPopup(!showPopup);
+                console.log(showPopup);
+              }}
+            />
+          </div>
+        )}
         {isLoggedIn && showPopup && (
           <div className="absolute top-16 z-20 right-10 text-center">
             <button
@@ -114,8 +115,6 @@ const AuthWrapper = ({
             </button>
           </div>
         )}
-        
-     
 
         <Routes>
           {isLoggedIn ? (
