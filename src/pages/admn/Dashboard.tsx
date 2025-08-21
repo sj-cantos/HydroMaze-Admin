@@ -145,7 +145,7 @@ export const Dashboard = () => {
         );
         setRecentOrders(ordersWithDateTime);
         setIsLoading(false);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error(error);
       }
     };

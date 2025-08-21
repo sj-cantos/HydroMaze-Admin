@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext } from "react";
 
 interface SidebarContextProps {
   expanded: boolean;
