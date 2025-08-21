@@ -12,7 +12,6 @@ import {
     TableBody,
     TableCell,
   } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import axios from "axios"
 import { FaLocationDot } from "react-icons/fa6";
 import '../../styles/CustomerDetails.css'
@@ -82,8 +81,8 @@ export default function CustomerDetails() {
                 const userData:LocData = await axios.get(`http://localhost:4001/api/v1/customers/${id}`)
                 setUserDetails(userData.data[0])
                 
-                let structuredLocData:Viewport[] = []
-                for(let i in userData.data[0].location){
+                const structuredLocData:Viewport[] = []
+                for(const i in userData.data[0].location){
                     structuredLocData.push({
                         longitude: userData.data[0].location[i].longitude,
                         latitude: userData.data[0].location[i].latitude,
