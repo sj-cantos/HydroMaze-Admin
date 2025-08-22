@@ -21,7 +21,8 @@ app.use(
   cors({
     origin: [
       "http://127.0.0.1:4000",
-      "http://localhost:4000"
+      "http://localhost:4000",
+      "http://localhost:8080"
     ],
     credentials: true,
   })
