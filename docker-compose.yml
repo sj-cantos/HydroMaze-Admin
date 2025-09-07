@@ -13,6 +13,8 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "4000:80"
+      - "4001:4001"
+    env_file:
+      - ./server/.env
  # read from environment
     # or use env_file: .env
