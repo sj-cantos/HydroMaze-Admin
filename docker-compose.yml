@@ -1,20 +1,23 @@
 name: Hydromaze-Admin
 
 services:
+
+  backend:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    environment:
+      - VITE_DATABASE_URI=${VITE_DATABASE_URI}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN=${REFRESH_TOKEN}
+      - NODE_ENV=${NODE_ENV:-development}
+  
+
   frontend:
     build: 
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:80"
-
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - "4001:4001"
-    env_file:
-      - ./server/.env
- # read from environment
-    # or use env_file: .env
