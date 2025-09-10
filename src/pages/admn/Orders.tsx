@@ -229,7 +229,7 @@ const Orders = () => {
     //   }
     // };
     // fetchData();
-  }, []);
+  }, [setActiveItem]);
 
   useEffect(() => {
     !expanded
@@ -249,11 +249,11 @@ const Orders = () => {
   }, [searchInfo]);
 
   useEffect(() => {
-    setSearchInfo({
-      ...searchInfo,
+    setSearchInfo((prevInfo) => ({
+      ...prevInfo,
       startDate: date?.from?.toISOString(),
       endDate: date?.to?.toISOString(),
-    });
+    }));
   }, [date]);
   
 

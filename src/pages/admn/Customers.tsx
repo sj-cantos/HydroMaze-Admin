@@ -82,7 +82,7 @@ export default function Customers() {
       }
     };
     fetchData();
-  }, []);
+  }, [setActiveItem]);
 
   useEffect(()=>{
     if(!expanded){

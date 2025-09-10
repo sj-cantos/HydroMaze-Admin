@@ -89,7 +89,7 @@ const Analytics = () => {
   console.log("monthly", monthlySalesData);
   useEffect(() => {
     setActiveItem("/analytics");
-  }, []);
+  }, [setActiveItem]);
 
   useEffect(() => {
     const salesData = async () => {

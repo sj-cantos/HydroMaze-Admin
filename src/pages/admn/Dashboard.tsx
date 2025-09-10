@@ -153,7 +153,7 @@ export const Dashboard = () => {
     if (isLoggedIn) {
       fetchData();
     }
-  }, [isLoggedIn, adminCredentials.token]);
+  }, [isLoggedIn, adminCredentials.token, axiosJWT, setActiveItem]);
 
   useEffect(() => {
     setExpandedClass(!expanded ? "notExpanded" : "");

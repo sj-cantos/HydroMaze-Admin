@@ -107,7 +107,7 @@ export default function CustomerDetails() {
             }
         }
         fetchData()
-    },[])
+    },[id])
 
     useEffect(()=>{
         setExpandedClass(!expanded ? "notExpanded" : "")
