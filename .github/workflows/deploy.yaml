@@ -21,8 +21,9 @@ jobs:
         run: npm install
 
       - name: Lint code
-        run: npm run lint
-        run: echo "Linting completed"
+        run: npm run lint \
+          || { echo 'Linting errors found'; exit 1; }
+
 
       
    
