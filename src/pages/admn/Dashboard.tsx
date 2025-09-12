@@ -105,7 +105,7 @@ export const Dashboard = () => {
         );
         console.log('db',todaysOrders)
         console.log('db',todaysOrders.data[0].count)
-        setTodaysOrders(todaysOrders.data[0].count || 0);
+        setTodaysOrders(todaysOrders.data.count || 0);
 
         const todaysRevenue = await axiosJWT.get(
           "/api/v1/dashboard/revenue-today/",

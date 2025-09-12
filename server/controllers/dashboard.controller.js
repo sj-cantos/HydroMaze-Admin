@@ -82,7 +82,7 @@ const getRevToday = async (req, res) => {
     const revenueToday = await Orders.aggregate([
       {
         $match: {
-          status: "delivered", 
+          status: "confirmed",
           createdAt: { $gte: start, $lt: end },
         },
       },
