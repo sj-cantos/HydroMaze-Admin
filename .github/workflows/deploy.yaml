@@ -1,46 +1,34 @@
-name: Build
+name: CI
+
 on:
   push:
     branches:
       - main
-      - master
-
+      - develop
+  pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-
-    env: 
-      VITE_DATABASE_URI: ${{ secrets.VITE_DATABASE_URI }}
-      ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-      NODE_ENV: production
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  lint-test-build:
+    runs-on: ubuntu-latest
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Lint code
-        run: npm run lint # Assuming you have a lint script in package.json
-      
+      - name: Run lint
+        run: npm run lint
+
       - name: Run tests
-        run: "echo 'No tests available'" # Replace with your test command if applicable
-      
-      - name: Build project
-        run: npm run build # Assuming you have a build script in package.json
+        run: npm test -- --ci --coverage
 
-      - name: Run server
-        with: 
-          working-directory: server
-        run: npm install && npm start
-
-      
-   
-
-
+      - name: Build app
+        run: npm run build
