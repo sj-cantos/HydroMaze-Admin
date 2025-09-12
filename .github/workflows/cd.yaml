@@ -51,5 +51,5 @@ jobs:
                   username: ec2-user
                   key: ${{ secrets.SSH_KEY }}
                   script: |
-                    docker-compose -f ~/docker-compose.yml pull
-                    docker-compose -f ~/docker-compose.yml up -d --remove-orphans
+                    docker-compose -f ~/docker/docker-compose.yml pull
+                    docker-compose -f ~/docker/docker-compose.yml up -d --remove-orphans
