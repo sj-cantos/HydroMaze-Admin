@@ -1,4 +1,4 @@
-name: Deploy
+name: Build
 on:
   push:
     branches:
@@ -8,7 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-
+    env: 
+      VITE_DATABASE_URI: ${{ secrets.VITE_DATABASE_URI }}
+      ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      NODE_ENV: production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,9 +36,9 @@ jobs:
         run: npm run build # Assuming you have a build script in package.json
 
       - name: Run server
-        run: cd server && npm install && npm start 
-      
-      
+        with: 
+          working-directory: server
+        run: npm install && npm start
 
       
    
