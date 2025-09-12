@@ -9,10 +9,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -39,6 +36,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { AlertButton } from "@/components/Orders/AlertButton";
 import StatusBadge from "@/components/Orders/StatusBadge";
 import { useNavigate } from "react-router-dom";
+import { MoreVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 export interface OrdersType {
   _id: string;
@@ -52,11 +56,10 @@ export interface OrdersType {
   date: string;
   time: string;
   location: {
-    longitude: number
-    latitude: number
-    address: string
-  }
-  
+    longitude: number;
+    latitude: number;
+    address: string;
+  };
 }
 
 import SidebarContext from "@/SidebarContext";
@@ -89,10 +92,7 @@ const Orders = () => {
 
   const handleSubmit = async () => {
     try {
-      const orderData = await axios.post(
-        "/api/v1/orders/search",
-        searchInfo
-      );
+      const orderData = await axios.post("/api/v1/orders/search", searchInfo);
       console.log(orderData);
       const ordersWithDateTime = orderData.data.map((order: OrdersType) => {
         const dateTime = new Date(order.createdAt);
@@ -106,7 +106,6 @@ const Orders = () => {
       console.log(error);
     }
   };
- 
 
   const handleCheckChange = (isSelected: string | boolean, orderID: string) => {
     isSelected
@@ -116,27 +115,42 @@ const Orders = () => {
   useEffect(() => {
     const getInitialData = async () => {
       try {
-        const ordersResponse = await axios.get('/api/v1/orders/');
+        const ordersResponse = await axios.get("/api/v1/orders/");
         const ordersData = ordersResponse.data.map((order: OrdersType) => ({
           ...order,
           ...formatDate(order.createdAt),
         }));
-  
-        const pendingOrders = ordersData.filter((order: OrdersType) => order.status === 'pending');
-        const confirmedOrders = ordersData.filter((order: OrdersType) => order.status === 'confirmed');
-        const forDeliveryOrders = ordersData.filter((order: OrdersType) => order.status === 'for delivery');
-        const deliveredOrders = ordersData.filter((order: OrdersType) => order.status === 'delivered');
-        const rejectedOrders = ordersData.filter((order: OrdersType) => order.status === 'rejected');
-  
-        setOrders([...pendingOrders, ...confirmedOrders, ...forDeliveryOrders, ...deliveredOrders, ...rejectedOrders]);
+
+        const pendingOrders = ordersData.filter(
+          (order: OrdersType) => order.status === "pending"
+        );
+        const confirmedOrders = ordersData.filter(
+          (order: OrdersType) => order.status === "confirmed"
+        );
+        const forDeliveryOrders = ordersData.filter(
+          (order: OrdersType) => order.status === "for delivery"
+        );
+        const deliveredOrders = ordersData.filter(
+          (order: OrdersType) => order.status === "delivered"
+        );
+        const rejectedOrders = ordersData.filter(
+          (order: OrdersType) => order.status === "rejected"
+        );
+
+        setOrders([
+          ...pendingOrders,
+          ...confirmedOrders,
+          ...forDeliveryOrders,
+          ...deliveredOrders,
+          ...rejectedOrders,
+        ]);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
-  
+
     getInitialData();
   }, []);
-  
 
   const handleListConfirm = async () => {
     try {
@@ -176,10 +190,7 @@ const Orders = () => {
 
   const handleSingleConfirm = async (id: string) => {
     try {
-      const confirmedOrders = await axios.post(
-        "/api/v1/orders/confirm",
-        [id]
-      );
+      const confirmedOrders = await axios.post("/api/v1/orders/confirm", [id]);
       if (confirmedOrders.data.successful) {
         toast({
           title: "Orders Successfully Confirmed",
@@ -192,12 +203,9 @@ const Orders = () => {
     }
   };
 
-  const handleSingleReject = async (id:string) => {
+  const handleSingleReject = async (id: string) => {
     try {
-      const confirmedOrders = await axios.post(
-        "/api/v1/orders/reject",
-        [id]
-      );
+      const confirmedOrders = await axios.post("/api/v1/orders/reject", [id]);
       if (confirmedOrders.data.successful) {
         toast({
           title: "Orders Successfully Rejected",
@@ -255,7 +263,6 @@ const Orders = () => {
       endDate: date?.to?.toISOString(),
     }));
   }, [date]);
-  
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
@@ -268,9 +275,7 @@ const Orders = () => {
       <h1 className="ml-5 mt-5 font-semibold text-gray-800 text-3xl">ORDERS</h1>
       <hr className="mt-2 mb-10" />
       <div className="ml-[2%] w-[93%]">
-        <Card
-          className={`w-[70%] ml-auto mr-auto mb-[70px]`}
-        >
+        <Card className={`w-[70%] ml-auto mr-auto mb-[70px]`}>
           <CardContent className="pt-5">
             <div className="grid grid-cols-4 gap-4">
               <div className=" col-span-1 flex flex-col space-y-1.5">
@@ -318,7 +323,6 @@ const Orders = () => {
                         defaultMonth={date?.from}
                         selected={date}
                         onSelect={setDate}
-                        
                         numberOfMonths={2}
                       />
                     </PopoverContent>
@@ -346,20 +350,30 @@ const Orders = () => {
               </div>
               <div className="col-span-1 flex items-end">
                 {/* <Button onClick={handleSubmit}>Search</Button> */}
-                <button type="button" onClick={handleSubmit} className="px-5 py-2.5 text-sm font-medium text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="px-5 py-2.5 text-sm font-medium text-white bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Search
+                </button>
               </div>
             </div>
           </CardContent>
-         
         </Card>
 
         {selectedOrders.length > 0 && (
           <div className="relative h-[50px]">
             <div className="absolute right-0">
-              <AlertButton onContinue={handleListConfirm} className="mr-2">
+              <AlertButton
+                onContinue={handleListConfirm}
+                className="mr-2 bg-blue-600"
+              >
                 Accept
               </AlertButton>
-              <AlertButton onContinue={handleListReject}>Reject</AlertButton>
+              <AlertButton onContinue={handleListReject} className="bg-red-600">
+                Reject
+              </AlertButton>
             </div>
           </div>
         )}
@@ -368,7 +382,9 @@ const Orders = () => {
           <TableCaption>All of your orders</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead><Checkbox /></TableHead>
+              <TableHead>
+                <Checkbox />
+              </TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Round</TableHead>
               <TableHead>Slim</TableHead>
@@ -396,7 +412,12 @@ const Orders = () => {
                   </TableCell>
                 )}
                 <TableCell>
-                  <button onClick={()=> {navigate(`/orders/${order._id}`, { state: { order } })}} className="underline">
+                  <button
+                    onClick={() => {
+                      navigate(`/orders/${order._id}`, { state: { order } });
+                    }}
+                    className="underline"
+                  >
                     {order.username}
                   </button>
                 </TableCell>
@@ -407,23 +428,26 @@ const Orders = () => {
                 <TableCell>{order.time}</TableCell>
                 <TableCell>
                   {order.status === "pending" && (
-                    <StatusBadge status="pending"/>
+                    <StatusBadge status="pending" />
                   )}
                   {order.status === "confirmed" && (
-                    <StatusBadge status="confirmed"/>
+                    <StatusBadge status="confirmed" />
                   )}
-                  {order.status === "delivered" && <StatusBadge status="delivered"/>}
+                  {order.status === "delivered" && (
+                    <StatusBadge status="delivered" />
+                  )}
                   {order.status === "for delivery" && (
-                    <StatusBadge status="for delivery"/>
+                    <StatusBadge status="for delivery" />
                   )}
                   {order.status === "rejected" && (
-                    <StatusBadge status="rejected"/>
+                    <StatusBadge status="rejected" />
                   )}
                 </TableCell>
                 <TableCell className="text-blue-800">
                   {/* <Button className="mr-1 px-2 h-8"><GiConfirmed /></Button>
                   <Button className="mr-1 px-2 h-8"><BsXCircle /></Button> */}
-                  <AlertButton 
+
+                  {/* <AlertButton 
                     onContinue={()=>handleSingleConfirm(order._id)}
                     className="text-blue-800 bg-transparent h-[auto] p-0 font-normal text-base hover:bg-transparent"
                   >
@@ -434,7 +458,15 @@ const Orders = () => {
                     className="text-blue-800 bg-transparent h-[auto] p-0 font-normal text-base hover:bg-transparent"
                   >
                      Reject
-                  </AlertButton><br />                 
+                  </AlertButton><br />                  */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger><MoreVertical/></DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={()=>handleSingleConfirm(order._id)}>Accept</DropdownMenuItem>
+                      <DropdownMenuItem onClick={()=>handleSingleReject(order._id)}>Reject</DropdownMenuItem>
+                      <hr />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
