@@ -23,7 +23,17 @@ jobs:
 
       - name: Lint code
         run: npm run lint # Assuming you have a lint script in package.json
+      
+      - name: Run tests
+        run: "echo 'No tests available'" # Replace with your test command if applicable
+      
+      - name: Build project
+        run: npm run build # Assuming you have a build script in package.json
 
+      - name: Run server
+        run: cd server && npm install && npm start 
+      
+      
 
       
    
