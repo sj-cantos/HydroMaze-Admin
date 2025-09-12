@@ -1,10 +1,13 @@
 name: CD
 
 on:
-    push:
-        branches:
-            - master
-            - develop
+    workflow_run:
+      workflows: ["CI"]
+      types:
+        - completed
+      branches:
+        - master
+        - develop
 
 jobs:
     deploy:
