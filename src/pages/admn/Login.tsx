@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:4001/auth/login",
+        "/auth/login",
         adminCredentials
       );
       const { accessToken, refreshToken } = response.data;

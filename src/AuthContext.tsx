@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const refreshToken = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:4001/auth/token", {
+      const response = await axios.post("/auth/token", {
         token: localStorage.getItem("refreshToken"),
       });
       setAdminCredentials((prevState) => ({
@@ -76,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
   const logout = async () => {
     try {
-      const response = await axios.delete("http://127.0.0.1:4001/auth/logout");
+      const response = await axios.delete("/auth/logout");
       if (response.status === 204) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");

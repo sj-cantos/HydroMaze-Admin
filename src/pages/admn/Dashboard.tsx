@@ -100,39 +100,39 @@ export const Dashboard = () => {
         };
 
         const todaysOrders = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/orders-today/",
+          "/api/v1/dashboard/orders-today/",
           config
         );
         console.log('db',todaysOrders)
-        console.log('db',todaysOrders.data.count)
+        console.log('db',todaysOrders.data[0].count)
         setTodaysOrders(todaysOrders.data[0].count || 0);
 
         const todaysRevenue = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/revenue-today/",
+          "/api/v1/dashboard/revenue-today/",
           config
         );
         setTodaysRevenue(todaysRevenue.data[0].revenue || 0);
 
         const salesMonth = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/revenue-month/",
+          "/api/v1/dashboard/revenue-month/",
           config
         );
         setSalesMonth(salesMonth.data[0].revenue || 0);
 
         const statusData = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/status-data/",
+          "/api/v1/dashboard/status-data/",
           config
         );
         setStatusData(statusData.data);
 
         const salesData = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/daily-sales/",
+          "/api/v1/dashboard/daily-sales/",
           config
         );
         setDailySales(salesData.data);
 
         const recentOrdersData = await axiosJWT.get(
-          "http://localhost:4001/api/v1/dashboard/recent-orders/",
+          "/api/v1/dashboard/recent-orders/",
           config
         );
         const ordersWithDateTime = recentOrdersData.data.map(

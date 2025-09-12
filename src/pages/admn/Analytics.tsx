@@ -94,13 +94,13 @@ const Analytics = () => {
   useEffect(() => {
     const salesData = async () => {
       const totalSales = await axios.get(
-        "http://localhost:4001/api/v1/analytics/total-sales"
+        "/api/v1/analytics/total-sales"
       );
       const containerTypeSales = await axios.get(
-        "http://localhost:4001/api/v1/analytics/container-type-rev"
+        "/api/v1/analytics/container-type-rev"
       );
       const monthlySales = await axios.get(
-        "http://localhost:4001/api/v1/analytics/monthly-rev"
+        "/api/v1/analytics/monthly-rev"
       );
 
       if (totalSales.data.monthlySalesTotal[0]) {

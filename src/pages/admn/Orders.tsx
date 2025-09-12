@@ -90,7 +90,7 @@ const Orders = () => {
   const handleSubmit = async () => {
     try {
       const orderData = await axios.post(
-        "http://localhost:4001/api/v1/orders/search",
+        "/api/v1/orders/search",
         searchInfo
       );
       console.log(orderData);
@@ -116,7 +116,7 @@ const Orders = () => {
   useEffect(() => {
     const getInitialData = async () => {
       try {
-        const ordersResponse = await axios.get('http://localhost:4001/api/v1/orders/');
+        const ordersResponse = await axios.get('/api/v1/orders/');
         const ordersData = ordersResponse.data.map((order: OrdersType) => ({
           ...order,
           ...formatDate(order.createdAt),
@@ -141,7 +141,7 @@ const Orders = () => {
   const handleListConfirm = async () => {
     try {
       const confirmedOrders = await axios.post(
-        "http://localhost:4001/api/v1/orders/confirm",
+        "/api/v1/orders/confirm",
         selectedOrders
       );
       if (confirmedOrders.data.successful) {
@@ -159,7 +159,7 @@ const Orders = () => {
   const handleListReject = async () => {
     try {
       const confirmedOrders = await axios.post(
-        "http://localhost:4001/api/v1/orders/reject",
+        "/api/v1/orders/reject",
         selectedOrders
       );
       if (confirmedOrders.data.successful) {
@@ -177,7 +177,7 @@ const Orders = () => {
   const handleSingleConfirm = async (id: string) => {
     try {
       const confirmedOrders = await axios.post(
-        "http://localhost:4001/api/v1/orders/confirm",
+        "/api/v1/orders/confirm",
         [id]
       );
       if (confirmedOrders.data.successful) {
@@ -195,7 +195,7 @@ const Orders = () => {
   const handleSingleReject = async (id:string) => {
     try {
       const confirmedOrders = await axios.post(
-        "http://localhost:4001/api/v1/orders/reject",
+        "/api/v1/orders/reject",
         [id]
       );
       if (confirmedOrders.data.successful) {

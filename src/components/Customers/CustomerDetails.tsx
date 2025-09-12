@@ -78,7 +78,7 @@ export default function CustomerDetails() {
     useEffect(()=>{
         const fetchData = async () => {
             try{
-                const userData:LocData = await axios.get(`http://localhost:4001/api/v1/customers/${id}`)
+                const userData:LocData = await axios.get(`/api/v1/customers/${id}`)
                 setUserDetails(userData.data[0])
                 
                 const structuredLocData:Viewport[] = []
@@ -91,7 +91,7 @@ export default function CustomerDetails() {
                 }
                 setViewports(structuredLocData)
 
-                const orders = await axios.get(`http://localhost:4001/api/v1/customers/recent-orders/${id}`)
+                const orders = await axios.get(`/api/v1/customers/recent-orders/${id}`)
 
                 const ordersWithDateTime = orders.data.map((order:OrderData) => {
                     const dateTime = new Date(order.createdAt);

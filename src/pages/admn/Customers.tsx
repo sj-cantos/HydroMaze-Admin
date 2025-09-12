@@ -61,7 +61,7 @@ export default function Customers() {
     const fetchData = async () => {
       try {
         const userData = await axios.get(
-          "http://localhost:4001/api/v1/customers/"
+          "/api/v1/customers/"
         );
 
         const structuredData = [];
