@@ -162,7 +162,7 @@ export const Dashboard = () => {
   return (
     <div id="Dashboard" className={`dashboard ${expandedClass}`}>
       <h1 className="ml-5 mt-5 font-semibold text-gray-800 text-3xl">
-        DASHBOARD H
+        DASHBOARD 
       </h1>
       <br className="m-2" />
 
