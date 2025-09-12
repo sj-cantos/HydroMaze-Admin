@@ -1,14 +1,8 @@
 name: CD
 
 on:
-    workflow_run:
-      workflows: ["CI"]
-      types:
-        - completed
-      branches:
-        - master
-        - develop
-
+    push:
+        branches: master
 jobs:
     deploy:
         runs-on: ubuntu-latest
