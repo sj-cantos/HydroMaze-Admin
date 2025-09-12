@@ -117,7 +117,7 @@ const getRevMonth = async (req, res) => {
     const revenueMonth = await Orders.aggregate([
       {
         $match: {
-          status: "delivered", 
+          status: "confirmed", 
           createdAt: { $gte: startMonth, $lt: endMonth },
         },
       },
@@ -189,7 +189,7 @@ const getDailySales = async (req, res) => {
     const dailySales = await Orders.aggregate([
       {
         $match: {
-          status: "delivered",
+          status: "confirmed",
           createdAt: { $gte: startWeekDate, $lt: end },
         },
       },
